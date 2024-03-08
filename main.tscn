@@ -1,0 +1,104 @@
+[gd_scene load_steps=10 format=3 uid="uid://btu3batc6p88e"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_n2l84"]
+[ext_resource type="PackedScene" uid="uid://ydj6qj13p55b" path="res://bird.tscn" id="2_c25tw"]
+[ext_resource type="PackedScene" uid="uid://cfanwexh3m02n" path="res://pipes.tscn" id="2_qik13"]
+[ext_resource type="PackedScene" uid="uid://cuxp5rjm75j6x" path="res://pipe_floor.tscn" id="3_mih23"]
+[ext_resource type="Texture2D" uid="uid://byaih3e4j6nma" path="res://Res/Background/Background2.png" id="3_vpuhs"]
+[ext_resource type="PackedScene" uid="uid://c0j75llmknohn" path="res://scorer.tscn" id="4_j3b2c"]
+[ext_resource type="FontFile" uid="uid://cnq1crno43qbl" path="res://Res/FFFFORWA.TTF" id="7_ltk72"]
+
+[sub_resource type="Animation" id="Animation_k6v6d"]
+resource_name = "Scroll"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Background2:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-635, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qgtkm"]
+_data = {
+"Scroll": SubResource("Animation_k6v6d")
+}
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_n2l84")
+pipes = ExtResource("2_qik13")
+pipe_floor = ExtResource("3_mih23")
+score_collision = ExtResource("4_j3b2c")
+metadata/_edit_vertical_guides_ = [490.0]
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(300, 300)
+
+[node name="Bird" parent="." instance=ExtResource("2_c25tw")]
+
+[node name="Background2" type="CanvasGroup" parent="."]
+z_index = -1
+
+[node name="Background" type="AnimationPlayer" parent="Background2"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_qgtkm")
+}
+autoplay = "Scroll"
+playback_default_blend_time = 3.0
+speed_scale = 0.258
+
+[node name="Background2" type="Sprite2D" parent="Background2"]
+position = Vector2(312, 286)
+scale = Vector2(2.48, 2.48)
+texture = ExtResource("3_vpuhs")
+
+[node name="Background3" type="Sprite2D" parent="Background2"]
+position = Vector2(947, 286)
+scale = Vector2(2.48, 2.48)
+texture = ExtResource("3_vpuhs")
+
+[node name="Background4" type="Sprite2D" parent="Background2"]
+position = Vector2(1582, 286)
+scale = Vector2(2.48, 2.48)
+texture = ExtResource("3_vpuhs")
+
+[node name="PipeTimer" type="Timer" parent="."]
+
+[node name="Score" type="Label" parent="."]
+z_index = 1
+texture_filter = 1
+offset_left = 655.0
+offset_top = 35.0
+offset_right = 784.0
+offset_bottom = 173.0
+theme_override_fonts/font = ExtResource("7_ltk72")
+theme_override_font_sizes/font_size = 100
+text = "0"
+horizontal_alignment = 2
+
+[node name="SpawnEnder" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="PlayButton" type="Button" parent="."]
+offset_left = 159.0
+offset_top = 161.0
+offset_right = 647.0
+offset_bottom = 439.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("7_ltk72")
+text = "Play"
+
+[connection signal="die" from="Bird" to="." method="_on_bird_die"]
+[connection signal="score" from="Bird" to="." method="_on_bird_score"]
+[connection signal="timeout" from="PipeTimer" to="." method="_on_pipe_timer_timeout"]
+[connection signal="timeout" from="SpawnEnder" to="." method="_on_spawn_ender_timeout"]
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]

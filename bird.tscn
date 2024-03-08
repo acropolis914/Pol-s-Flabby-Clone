@@ -1,0 +1,125 @@
+[gd_scene load_steps=16 format=3 uid="uid://ydj6qj13p55b"]
+
+[ext_resource type="Script" path="res://bird.gd" id="1_b4d4o"]
+[ext_resource type="Texture2D" uid="uid://pit5bp0najva" path="res://Res/Player/StyleBird1/Bird1-2.png" id="2_2sk72"]
+[ext_resource type="Texture2D" uid="uid://cse5itmbj6m6h" path="res://Res/Player/StyleBird1/Bird1-3.png" id="2_d868c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nqh21"]
+atlas = ExtResource("2_d868c")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5segi"]
+atlas = ExtResource("2_d868c")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rlenn"]
+atlas = ExtResource("2_d868c")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tjshh"]
+atlas = ExtResource("2_d868c")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71n4u"]
+atlas = ExtResource("2_2sk72")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kvmap"]
+atlas = ExtResource("2_2sk72")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vwaq2"]
+atlas = ExtResource("2_2sk72")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gqfo5"]
+atlas = ExtResource("2_2sk72")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_75qma"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nqh21")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5segi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rlenn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tjshh")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71n4u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kvmap")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vwaq2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gqfo5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ol1c8"]
+radius = 7.25806
+height = 15.3226
+
+[sub_resource type="Gradient" id="Gradient_o2ydc"]
+colors = PackedColorArray(0.627451, 0, 0, 1, 1, 0.156863, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_82vlt"]
+gradient = SubResource("Gradient_o2ydc")
+
+[node name="Bird" type="Area2D"]
+z_index = 2
+texture_filter = 3
+scale = Vector2(2.48, 2.48)
+script = ExtResource("1_b4d4o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0.806452, -1.6129)
+sprite_frames = SubResource("SpriteFrames_75qma")
+animation = &"dead"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_ol1c8")
+debug_color = Color(0.560784, 0, 0.105882, 0.419608)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 50
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.6
+randomness = 0.14
+lifetime_randomness = 0.11
+texture = SubResource("GradientTexture2D_82vlt")
+emission_shape = 1
+emission_sphere_radius = 10.07
+direction = Vector2(1, -50)
+spread = 44.46
+initial_velocity_max = 49.57
+angular_velocity_max = 50.82
+angle_min = -101.6
+angle_max = -16.9
+scale_amount_min = 0.0
+scale_amount_max = 0.1
+hue_variation_max = 0.87
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
