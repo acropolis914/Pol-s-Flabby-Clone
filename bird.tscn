@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ydj6qj13p55b"]
+[gd_scene load_steps=20 format=3 uid="uid://ydj6qj13p55b"]
 
 [ext_resource type="Script" path="res://bird.gd" id="1_b4d4o"]
 [ext_resource type="Texture2D" uid="uid://pit5bp0najva" path="res://Res/Player/StyleBird1/Bird1-2.png" id="2_2sk72"]
@@ -77,6 +77,27 @@ animations = [{
 radius = 7.25806
 height = 15.3226
 
+[sub_resource type="Gradient" id="Gradient_yax0y"]
+colors = PackedColorArray(0.410865, 0.627223, 0.764062, 1, 0.853477, 0.958875, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4smbb"]
+gradient = SubResource("Gradient_yax0y")
+width = 5
+height = 5
+fill_from = Vector2(0.0167598, 1)
+
+[sub_resource type="Curve" id="Curve_i7aw5"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0.0463576, 10.989), 0.0, 0.0, 0, 0, Vector2(0.291391, 59.3407), 539.285, 539.285, 0, 0, Vector2(0.503311, 200), 0.0, 0.0, 0, 0, Vector2(1, 81.3187), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Curve" id="Curve_xqt3b"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, -15.3846), 0.0, 0.0, 0, 0, Vector2(0.536424, 54.9451), 0.0, 0.0, 0, 0, Vector2(0.986755, 46.1538), 0.0, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="Gradient" id="Gradient_o2ydc"]
 colors = PackedColorArray(0.627451, 0, 0, 1, 1, 0.156863, 0, 1)
 
@@ -99,9 +120,30 @@ animation = &"dead"
 shape = SubResource("CapsuleShape2D_ol1c8")
 debug_color = Color(0.560784, 0, 0.105882, 0.419608)
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="sound_coin" type="AudioStreamPlayer" parent="."]
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+[node name="life" type="CPUParticles2D" parent="."]
+visible = false
+scale = Vector2(1, 1)
+emitting = false
+amount = 50
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.12
+randomness = 0.06
+lifetime_randomness = 0.11
+texture = SubResource("GradientTexture2D_4smbb")
+emission_shape = 2
+emission_sphere_radius = 35.63
+direction = Vector2(0, 0)
+gravity = Vector2(0, 0)
+linear_accel_max = 25.88
+linear_accel_curve = SubResource("Curve_i7aw5")
+radial_accel_min = -47.06
+radial_accel_max = -30.59
+radial_accel_curve = SubResource("Curve_xqt3b")
+
+[node name="blood" type="CPUParticles2D" parent="."]
 emitting = false
 amount = 50
 lifetime = 1.5
@@ -112,9 +154,9 @@ lifetime_randomness = 0.11
 texture = SubResource("GradientTexture2D_82vlt")
 emission_shape = 1
 emission_sphere_radius = 10.07
-direction = Vector2(1, -50)
+direction = Vector2(-15, -5)
 spread = 44.46
-initial_velocity_max = 49.57
+initial_velocity_max = 40.0
 angular_velocity_max = 50.82
 angle_min = -101.6
 angle_max = -16.9

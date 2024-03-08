@@ -11,10 +11,17 @@ var dead = false
 
 func _ready():
 	flying = false
+	dead = false
 	GRAVITY = 0
 	var screen_size = get_viewport_rect().size
 	print(screen_size)
-	pass
+
+func new_game():
+	$AnimatedSprite2D.rotation = 0
+	flying =false
+	dead =false
+	velocity = Vector2.ZERO
+	GRAVITY = 0
 	
 func _process(delta):
 	if Input.is_action_just_pressed("fly") && !dead:
@@ -29,15 +36,18 @@ func _process(delta):
 	
 	velocity.y += GRAVITY * delta
 	position.y += velocity.y
-		
+	
+#clamp to screen size
 	if position.y > 600:
 		position.y = 600
 	elif position.y < 0:
 		position.y = 0
 	#print(position)
 
+#pataas na ikot
 	if velocity.y < 0:
 		$AnimatedSprite2D.rotation = deg_to_rad(velocity.y*10)
+#pababa na ikot
 	elif velocity.y > 0 && position.y < 600:
 		$AnimatedSprite2D.rotation = deg_to_rad(velocity.y*9)
 	
@@ -49,11 +59,15 @@ func _process(delta):
 
 func kill():
 	$AnimatedSprite2D.rotation = deg_to_rad(90)
+	$AnimatedSprite2D.animation = "dead"
+	$AnimatedSprite2D.play()
 	print("entered")
-	die.emit()
+	dead =true
+	$blood.emitting = true
 	
-func music():
-	$AudioStreamPlayer.play()
+func audio(mus):
+	if mus == "coin":
+		$sound_coin.play()
 
 func add_score():
 	score.emit()
@@ -63,9 +77,7 @@ func _on_body_entered(body):
 	if body.name.begins_with("scorer"):
 		score.emit()
 	if body.name.begins_with("pipe"):
-		$AnimatedSprite2D.animation = "dead"
-		$AnimatedSprite2D.play()
-		dead =true
 		die.emit()
 		kill()
-		$CPUParticles2D.emitting = true
+		
+

@@ -15,6 +15,7 @@ var default_pos = 300
 var pipe_spawn_center = 0
 var scroll_speed = 300
 var dead = false
+var first_input =true
 
 func _ready():
 	$PlayButton.show
@@ -22,13 +23,22 @@ func _ready():
 	$Bird.position= $Marker2D.position
 	
 func new_game():
-	$PipeTimer.start(pipe_time)
+	pipe_time = 2
+	pipe_space= 150
+	time = 0
+	frequency = 5
+	amplitude = 20
+	scroll_speed = 300
+	for n in get_children():
+		if n.name.begins_with("pipe") || n.name.begins_with("scorer"):
+			n.queue_free()
+	$Background2/Background.play()
 	$Bird.position= $Marker2D.position
 	$Score.text = str(score)
-	$Bird.flying = false
-	for n in get_children():
-			if n.name.begins_with("pipe") || n.name.begins_with("scorer"):
-				n.queue_free()
+	$Bird.new_game()
+	dead = false
+	first_input =true
+
 	
 
 func _process(delta):
@@ -37,15 +47,16 @@ func _process(delta):
 		for n in get_children():
 			if n.name.begins_with("pipe") || n.name.begins_with("scorer"):
 				n.stop()
-	
-	
-	#print(time)
-	#var  sintime= sin(time)
-	#print(sintime)
-	#print(pipe_spawn_center)
+	if not first_input:
+		return
+	else:
+		if Input.is_action_pressed("fly"):
+			first_input =false
+			$PipeTimer.start(pipe_time)
+		
 	
 func _on_pipe_timer_timeout():
-	amplitude += 1
+	amplitude += 5
 	pipe_spawn_center = (default_pos + (sin(time)* amplitude))
 	#print(pipe_time)
 	#print(pipe_space)
@@ -70,7 +81,7 @@ func _on_pipe_timer_timeout():
 	
 
 func game_over():
-	$Background2/Background.stop()
+	$Background2/Background.pause()
 	score = 0
 	$PlayButton.show()
 

@@ -60,12 +60,12 @@ scale = Vector2(2.48, 2.48)
 texture = ExtResource("3_vpuhs")
 
 [node name="Background3" type="Sprite2D" parent="Background2"]
-position = Vector2(947, 286)
+position = Vector2(946, 286)
 scale = Vector2(2.48, 2.48)
 texture = ExtResource("3_vpuhs")
 
 [node name="Background4" type="Sprite2D" parent="Background2"]
-position = Vector2(1582, 286)
+position = Vector2(1581, 286)
 scale = Vector2(2.48, 2.48)
 texture = ExtResource("3_vpuhs")
 
@@ -94,8 +94,11 @@ offset_right = 647.0
 offset_bottom = 439.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.0705882, 0.4, 0.513726, 1)
+theme_override_colors/font_hover_color = Color(0.223529, 0.6, 0.596078, 1)
 theme_override_fonts/font = ExtResource("7_ltk72")
 text = "Play"
+flat = true
 
 [connection signal="die" from="Bird" to="." method="_on_bird_die"]
 [connection signal="score" from="Bird" to="." method="_on_bird_score"]
